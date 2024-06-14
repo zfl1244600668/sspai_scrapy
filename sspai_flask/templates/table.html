@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles Table</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@material/web@latest/dist/material-web/material-web.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+        }
+
+        .mdc-data-table {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .mdc-data-table__table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .mdc-data-table__header-cell, .mdc-data-table__cell {
+            padding: 16px;
+            text-align: left;
+        }
+
+        .mdc-data-table__header-cell {
+            background-color: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .mdc-data-table__row:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            color: #6200ea;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<h1>Articles Table</h1>
+<div class="mdc-data-table">
+    <table id="articlesTable" class="mdc-data-table__table">
+        <thead>
+        <tr class="mdc-data-table__header-row">
+            <th class="mdc-data-table__header-cell">Title</th>
+            <th class="mdc-data-table__header-cell">Link</th>
+            <th class="mdc-data-table__header-cell">Author</th>
+            <th class="mdc-data-table__header-cell">Time Posted</th>
+            <th class="mdc-data-table__header-cell">Charge Count</th>
+            <th class="mdc-data-table__header-cell">Comment Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr class="mdc-data-table__row">
+                <td class="mdc-data-table__cell">{{ article.title }}</td>
+                <td class="mdc-data-table__cell"><a href="{{ article.link }}">{{ article.link }}</a></td>
+                <td class="mdc-data-table__cell">{{ article.author }}</td>
+                <td class="mdc-data-table__cell">{{ article.time_posted }}</td>
+                <td class="mdc-data-table__cell">{{ article.charge_count }}</td>
+                <td class="mdc-data-table__cell">{{ article.comment_count }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@material/web@latest/dist/material-web/material-web.min.js"></script>
+<script src="{{ url_for('static', filename='table.js') }}"></script>
+</body>
+</html>

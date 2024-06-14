@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles Chart</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-components-web/dist/material-components-web.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/material-components-web/dist/material-components-web.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='chart.js') }}"></script>
+    <style>
+        body {
+            display: flex;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f5f5f5;
+        }
+
+        .sidebar {
+            width: 150px;
+            background-color: #ffffff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 20px;
+            border-radius: 0 10px 10px 0;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+            width: 0;
+        }
+
+        .sidebar button {
+            margin-bottom: 10px;
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .content {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.expanded {
+            margin-left: 0;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 80%;
+            width: 100%;
+            border-radius: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .toggle-sidebar {
+            position: absolute;
+            top: 20px;
+            left: 220px;
+            z-index: 10;
+            transition: left 0.3s ease;
+        }
+
+        .sidebar.hidden + .toggle-sidebar {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" id="sidebar">
+        <button class="mdc-button mdc-button--raised chart-switch" data-chart-type="stackedBar">堆叠柱状图</button>
+        <button class="mdc-button mdc-button--raised chart-switch" data-chart-type="dualLine">双折线图</button>
+        <button class="mdc-button mdc-button--raised chart-switch" data-chart-type="scatter">散点图</button>
+        <button class="mdc-button mdc-button--raised chart-switch" data-chart-type="stackedArea">堆积面积图</button>
+        <button class="mdc-button mdc-button--raised chart-switch" data-chart-type="dualAxis">双轴图</button>
+        <button class="mdc-button mdc-button--raised chart-switch" data-chart-type="radar">雷达图</button>
+    </div>
+    <button class="mdc-button mdc-button--raised toggle-sidebar" id="toggleButton">放大/缩小</button>
+    <div class="content" id="content">
+        <div class="chart-container">
+            <canvas id="articlesChart" width="800" height="400"></canvas>
+        </div>
+    </div>
+    <script>
+        document.getElementById('toggleButton').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            sidebar.classList.toggle('hidden');
+            content.classList.toggle('expanded');
+        });
+
+        fetch('{{ url_for('api_articles') }}')
+        .then(response => response.json())
+        .then(data => {
+            const titles = data.map(article => article.title);
+            const chargeCounts = data.map(article => article.charge_count);
+            const commentCounts = data.map(article => article.comment_count);
+
+            const ctx = document.getElementById('articlesChart').getContext('2d');
+            let currentChart = createChart(ctx, 'stackedBar');
+            updateChart(currentChart, 'stackedBar');
+
+            document.querySelectorAll('button.chart-switch').forEach(button => {
+                button.addEventListener('click', function() {
+                    currentChart.destroy();
+                    const chartType = this.getAttribute('data-chart-type');
+                    currentChart = createChart(ctx, chartType);
+                    updateChart(currentChart, chartType);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

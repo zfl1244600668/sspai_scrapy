@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Control Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@material/button/dist/mdc.button.min.css">
+    <style>
+        :root {
+            --mdc-theme-primary: #6200ee;
+            --mdc-theme-on-primary: #ffffff;
+            --mdc-button-height: 48px;
+            --mdc-button-horizontal-padding: 24px;
+            --mdc-shape-small-component-radius: 16px;
+            --background-color: #f0f0f0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--background-color);
+            flex-direction: column;
+            gap: 25px;
+            font-family: 'Roboto', sans-serif;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: var(--mdc-theme-primary);
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+
+        .mdc-button {
+            height: var(--mdc-button-height);
+            padding: 0 var(--mdc-button-horizontal-padding);
+            color: var(--mdc-theme-on-primary);
+            border-radius: var(--mdc-shape-small-component-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: normal;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+<h1>少数派文章爬虫系统的设计及实现</h1>
+<button class="mdc-button mdc-button--raised" onclick="location.href='{{ url_for('table') }}'">表格</button>
+<button class="mdc-button mdc-button--raised" onclick="location.href='{{ url_for('chart') }}'">图表</button>
+
+<script src="https://cdn.jsdelivr.net/npm/@material/button/dist/mdc.button.min.js"></script>
+<script>
+    document.querySelectorAll('.mdc-button').forEach((button) => {
+        mdc.ripple.MDCRipple.attachTo(button);
+    });
+</script>
+</body>
+</html>
